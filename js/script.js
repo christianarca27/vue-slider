@@ -27,6 +27,8 @@ const { createApp } = Vue
             }
         ],
         activeIndex: 0,
+        isIntervalActive: false,
+        interval: "",
       }
     },
 
@@ -39,12 +41,24 @@ const { createApp } = Vue
             this.activeIndex--;
             this.activeIndex += this.slides.length;
             this.activeIndex %= this.slides.length;
+        },
+        startAutoplay() {
+            if(!this.isIntervalActive) {
+                this.interval = setInterval(() => {
+                    this.nextSlide();
+                }, 3000);
+                this.isIntervalActive = true;
+            }
+        },
+        stopAutoplay() {
+            if(this.isIntervalActive) {
+                clearInterval(this.interval);
+                this.isIntervalActive = false;
+            }
         }
     },
-    
+
     mounted() {
-        setInterval(() => {
-            this.nextSlide();
-        }, 3000);
+        this.startAutoplay();
     },
   }).mount('#app')
